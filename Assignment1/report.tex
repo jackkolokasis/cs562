@@ -1,0 +1,157 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{placeins}
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{University of Crete, Computer Science Department} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge CS-562 Advanced Topics in Databases \\ 
+Report Assignment 1 % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Iacovos Kolokasis \\(kolokasis@csd.uoc.gr) \\AM:1039} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Frequent Terms and Stop Words}
+In this exercise, I implement a program that is calculate the frequency of each
+word, found inside the word datasets after removing the non-alpanumeric terms, and
+find the stop words. The first job is similar with word count example. Acctually
+the reducer produce an output file of the format <word, frequency>, where word
+is the key and the frequency is the value. The next job, use a mapper which take
+the output of the previous job, and use now as key the frequency of each word
+and as value the word. Using a comparator, sort the words by frequency in
+descending order and export the output. From the output we collect the words
+with frequency grater tha 4000.
+
+The top ten most frequent words among with their frequency are shown in Table
+\ref{tab:words:freq}  :
+
+\begin{table}
+    \center
+    \begin{tabular}{ |c|c||c|c|}
+    \hline
+        Word &Frequency &Word &Frequency\\
+        \hline
+        the     &184056	&i       &66407	\\ 
+        \hline          
+        and     &148816	&in      &59715	\\ 
+        \hline          
+        of      &99252	&it      &56849	\\ 
+        \hline          
+        to      &91657	&that    &51213	\\ 
+        \hline          
+        a       &87368	&was     &41832	\\ 
+        \hline
+    \end{tabular}
+    \caption {Top Ten frequent words}
+    \label{tab:words:freq}
+\end{table}
+\FloatBarrier
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\section{Measuring The Performance of Map Reduce}
+
+%------------------------------------------------
+\begin{enumerate}
+    \item Using 10 reducers without combiner the job executed $29427ms \simeq
+    29.42 s$ .
+    
+    \item Using 10 reducers with combiner the job executed $21048ms \simeq
+    21.05s$ . The execution time is reduced and this is due to the cobiner that
+    helps segregating data into multiple groups for Reduce phase, which makes it
+    easier to process.  
+    
+    \item Using 50 reducers without combiners the job executed $37213ms \simeq
+    37.21s$. The excution time is larger than the previous. This due to the
+    reducers number. The big number of reducers causes overhead to our system,
+    because the datasets devide to unmballanced partitions. 
+
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 3
+%----------------------------------------------------------------------------------------
+
+\section{Variation of an Inverted Index}
+
+We implement an inverted index for the documents words dataset. From these
+words, we excluded the alpanumeric terms and the stop words that we compute in
+the previous exercises. Well the total unique words excluded stopwords
+calculated by the number of reduce input groups and equalls to 90868. In order
+to calculate the words that appear only in one documents we set a global
+counter, defined either by the Map-Reduce framework or applications. Counter is
+an Enum type and defined in a seperate class. We increment the counter in reduce
+task if the word appear only in one document and from Driver class we get the
+value. As a result from the counter we calculate the total words that appear
+only in one document to be 73661.
+
+%------------------------------------------------
+
+
+
+
+%------------------------------------------------
+
+\end{document}
